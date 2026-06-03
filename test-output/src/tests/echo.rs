@@ -111,7 +111,8 @@ macro_rules! assert_echo {
             },
             Target::Erlang => {
                 assert_echo!(&snapshot_name, Some($target), None, $project_name);
-            }
+            },
+            Target::Python => todo!(),
         }
     };
 
@@ -127,6 +128,7 @@ fn snapshot_name(target: Option<Target>, runtime: Option<Runtime>, suffix: &str)
     let show_target = |target: Target| match target {
         Target::Erlang => "erlang",
         Target::JavaScript => "javascript",
+        Target::Python => "python",
     };
     let show_runtime = |runtime: Runtime| match runtime {
         Runtime::NodeJs => "nodejs",
@@ -148,6 +150,7 @@ fn snapshot_name(target: Option<Target>, runtime: Option<Runtime>, suffix: &str)
 fn echo_bitarray() {
     assert_echo!(Target::JavaScript, "echo_bitarray");
     assert_echo!(Target::Erlang, "echo_bitarray");
+    assert_echo!(Target::Python, "echo_bitarray");
 }
 
 #[test]
@@ -164,6 +167,7 @@ fn echo_charlist() {
 fn echo_custom_type() {
     assert_echo!(Target::Erlang, "echo_custom_type");
     assert_echo!(Target::JavaScript, "echo_custom_type");
+    assert_echo!(Target::Python, "echo_custom_type");
 }
 
 #[test]
@@ -175,6 +179,7 @@ fn echo_dict() {
 fn echo_float() {
     assert_echo!(Target::Erlang, "echo_float");
     assert_echo!(Target::JavaScript, "echo_float");
+    assert_echo!(Target::Python, "echo_float");
 }
 
 #[test]
