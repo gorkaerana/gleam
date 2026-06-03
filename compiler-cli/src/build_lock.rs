@@ -21,6 +21,7 @@ impl BuildLock {
         let target = match target {
             Target::Erlang => "erlang",
             Target::JavaScript => "javascript",
+            Target::Python => "python",
         };
         Ok(Self {
             directory,

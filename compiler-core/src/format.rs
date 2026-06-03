@@ -220,6 +220,7 @@ impl<'comments> Formatter<'comments> {
             None => document,
             Some(Target::Erlang) => docvec!["@target(erlang)", line(), document],
             Some(Target::JavaScript) => docvec!["@target(javascript)", line(), document],
+            Some(Target::Python) => docvec!["@target(python)", line(), document],
         };
 
         comments.to_doc().append(document.group())
@@ -886,6 +887,7 @@ impl<'comments> Formatter<'comments> {
             documentation: _,
             external_erlang,
             external_javascript,
+            external_python,
             implementations: _,
             purity: _,
         } = function;
@@ -895,6 +897,7 @@ impl<'comments> Formatter<'comments> {
             .set_internal(*publicity)
             .set_external_erlang(external_erlang)
             .set_external_javascript(external_javascript)
+            .set_external_python(external_python)
             .to_doc();
 
         // Fn name and args
@@ -3691,6 +3694,7 @@ fn constant_call_arg_formatting<A>(
 struct AttributesPrinter<'a> {
     external_erlang: &'a Option<(EcoString, EcoString, SrcSpan)>,
     external_javascript: &'a Option<(EcoString, EcoString, SrcSpan)>,
+    external_python: &'a Option<(EcoString, EcoString, SrcSpan)>,
     deprecation: &'a Deprecation,
     internal: bool,
 }
@@ -3700,6 +3704,7 @@ impl<'a> AttributesPrinter<'a> {
         Self {
             external_erlang: &None,
             external_javascript: &None,
+            external_python: &None,
             deprecation: &Deprecation::NotDeprecated,
             internal: false,
         }
@@ -3720,6 +3725,15 @@ impl<'a> AttributesPrinter<'a> {
         self.external_javascript = external;
         self
     }
+
+    pub fn set_external_python(
+        mut self,
+        external: &'a Option<(EcoString, EcoString, SrcSpan)>,
+    ) -> Self {
+        self.external_python = external;
+        self
+    }
+
 
     pub fn set_internal(mut self, publicity: Publicity) -> Self {
         self.internal = publicity.is_internal();

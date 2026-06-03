@@ -68,6 +68,11 @@ pub enum Target {
     #[serde(alias = "js")]
     #[clap(alias = "js")]
     JavaScript,
+    #[strum(serialize = "py")]
+    #[serde(alias = "py")]
+    #[clap(alias = "py")]
+    Python,
+
 }
 
 impl Target {
@@ -75,6 +80,7 @@ impl Target {
         match self {
             Target::Erlang => "Erlang",
             Target::JavaScript => "JavaScript",
+            Target::Python => "Python",
         }
     }
 

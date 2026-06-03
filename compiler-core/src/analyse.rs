@@ -447,6 +447,7 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
             has_body: true,
             has_erlang_external: false,
             has_javascript_external: false,
+            has_python_external: false,
         };
         let mut expr_typer = ExprTyper::new(environment, definition, &mut self.problems);
         let typed_expr = expr_typer.infer_const(&annotation, *value);
@@ -540,6 +541,7 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
             deprecation,
             external_erlang,
             external_javascript,
+            external_python,
             return_type: (),
             implementations: _,
             purity: _,
@@ -565,7 +567,7 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
 
         // Find the external implementation for the current target, if one has been given.
         let external =
-            target_function_implementation(target, &external_erlang, &external_javascript);
+            target_function_implementation(target, &external_erlang, &external_javascript, &external_python);
 
         // The function must have at least one implementation somewhere.
         let has_implementation = self.ensure_function_has_an_implementation(
@@ -588,6 +590,7 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
             has_body,
             has_erlang_external: external_erlang.is_some(),
             has_javascript_external: external_javascript.is_some(),
+            has_python_external: external_javascript.is_some(),
         };
 
         // We have already registered the function in the `register_value_from_function`
@@ -821,6 +824,7 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
             body,
             external_erlang,
             external_javascript,
+            external_python,
             implementations,
             purity,
         };
@@ -1579,6 +1583,7 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
             documentation,
             external_erlang,
             external_javascript,
+            external_python,
             deprecation,
             end_position: _,
             body: _,
@@ -1616,7 +1621,7 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
 
         // When external implementations are present then the type annotations
         // must be given in full, so we disallow holes in the annotations.
-        hydrator.permit_holes(external_erlang.is_none() && external_javascript.is_none());
+        hydrator.permit_holes(external_erlang.is_none() && external_javascript.is_none() && external_python.is_none());
 
         let arguments_types = arguments
             .iter()
@@ -1757,10 +1762,12 @@ fn target_function_implementation<'a>(
     target: Target,
     external_erlang: &'a Option<(EcoString, EcoString, SrcSpan)>,
     external_javascript: &'a Option<(EcoString, EcoString, SrcSpan)>,
+    external_python: &'a Option<(EcoString, EcoString, SrcSpan)>,
 ) -> &'a Option<(EcoString, EcoString, SrcSpan)> {
     match target {
         Target::Erlang => external_erlang,
         Target::JavaScript => external_javascript,
+        Target::Python => external_python,
     }
 }
 
@@ -1925,6 +1932,7 @@ fn generalise_function(
         return_type,
         external_erlang,
         external_javascript,
+        external_python,
         implementations,
         purity,
     } = function;
@@ -1988,6 +1996,7 @@ fn generalise_function(
         body,
         external_erlang,
         external_javascript,
+        external_python,
         implementations,
         purity,
     }

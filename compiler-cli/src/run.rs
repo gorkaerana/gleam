@@ -153,6 +153,7 @@ pub fn setup(
                 run_javascript_bun_command(paths, &main_function.package, &module, arguments)
             }
         },
+        Target::Python => todo!(),
     }
 }
 
