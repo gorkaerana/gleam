@@ -3227,7 +3227,7 @@ where
                         can_run_on_python: true,
                         uses_erlang_externals: false,
                         uses_javascript_externals: false,
-                        uses_python_externals: false
+                        uses_python_externals: false,
                     },
                 })))
             }

@@ -3734,7 +3734,6 @@ impl<'a> AttributesPrinter<'a> {
         self
     }
 
-
     pub fn set_internal(mut self, publicity: Publicity) -> Self {
         self.internal = publicity.is_internal();
         self

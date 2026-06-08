@@ -58,7 +58,6 @@ pub struct Implementations {
     /// Whether the function has an implementation that uses external python
     /// code.
     pub uses_python_externals: bool,
-
 }
 
 impl Implementations {

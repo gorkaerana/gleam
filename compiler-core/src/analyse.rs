@@ -566,8 +566,12 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
         self.assert_valid_javascript_external(&name, external_javascript.as_ref(), location);
 
         // Find the external implementation for the current target, if one has been given.
-        let external =
-            target_function_implementation(target, &external_erlang, &external_javascript, &external_python);
+        let external = target_function_implementation(
+            target,
+            &external_erlang,
+            &external_javascript,
+            &external_python,
+        );
 
         // The function must have at least one implementation somewhere.
         let has_implementation = self.ensure_function_has_an_implementation(
@@ -1621,7 +1625,9 @@ impl<'a, A> ModuleAnalyzer<'a, A> {
 
         // When external implementations are present then the type annotations
         // must be given in full, so we disallow holes in the annotations.
-        hydrator.permit_holes(external_erlang.is_none() && external_javascript.is_none() && external_python.is_none());
+        hydrator.permit_holes(
+            external_erlang.is_none() && external_javascript.is_none() && external_python.is_none(),
+        );
 
         let arguments_types = arguments
             .iter()

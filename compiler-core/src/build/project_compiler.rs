@@ -616,7 +616,7 @@ where
                 prelude_location: Utf8PathBuf::from("../prelude.mjs"),
             },
 
-            Target::Python => todo!()
+            Target::Python => todo!(),
         };
 
         let mut compiler = PackageCompiler::new(
