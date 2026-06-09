@@ -110,7 +110,6 @@ impl Target {
     pub fn is_python(&self) -> bool {
         matches!(self, Self::Python)
     }
-
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -166,7 +165,6 @@ pub enum Runtime {
     NodeJs,
     Deno,
     Bun,
-    Uv,
 }
 
 impl Runtime {
